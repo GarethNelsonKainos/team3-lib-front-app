@@ -1,0 +1,83 @@
+{% extends "layouts/base.njk" %}
+
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+  {% if transactionType == 'checkout' %}
+    {{ govukPanel({
+      titleText: "Book checked out successfully",
+      html: "Copy ID<br><strong>" + copyId + "</strong>"
+    }) }}
+
+    <h2 class="govuk-heading-m">Transaction details</h2>
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Member" },
+          value: { text: memberName }
+        },
+        {
+          key: { text: "Book" },
+          value: { text: bookTitle }
+        },
+        {
+          key: { text: "Copy ID" },
+          value: { text: copyId }
+        },
+        {
+          key: { text: "Due date" },
+          value: { text: dueDate }
+        }
+      ]
+    }) }}
+
+  {% else %}
+    {{ govukPanel({
+      titleText: "Book checked in successfully",
+      html: "Copy ID<br><strong>" + copyId + "</strong>"
+    }) }}
+
+    <h2 class="govuk-heading-m">Transaction details</h2>
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Member" },
+          value: { text: memberName }
+        },
+        {
+          key: { text: "Book" },
+          value: { text: bookTitle }
+        },
+        {
+          key: { text: "Copy ID" },
+          value: { text: copyId }
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  <h2 class="govuk-heading-m">What would you like to do next?</h2>
+
+  <div class="govuk-button-group">
+    {{ govukButton({
+      text: "Check out another book",
+      href: "/borrowing/checkout"
+    }) }}
+    {{ govukButton({
+      text: "Check in another book",
+      href: "/borrowing/checkin",
+      classes: "govuk-button--secondary"
+    }) }}
+    {{ govukButton({
+      text: "Go to dashboard",
+      href: "/",
+      classes: "govuk-button--secondary"
+    }) }}
+  </div>
+
+{% endblock %}
