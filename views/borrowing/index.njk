@@ -1,0 +1,110 @@
+{% extends "layouts/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
+{% block beforeContent %}
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">Borrowing</li>
+    </ol>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Borrowing</h1>
+
+  {# Quick Actions #}
+  <div class="govuk-button-group govuk-!-margin-bottom-6">
+    {{ govukButton({
+      text: "Check out book",
+      href: "/borrowing/checkout"
+    }) }}
+    {{ govukButton({
+      text: "Check in book",
+      href: "/borrowing/checkin",
+      classes: "govuk-button--secondary"
+    }) }}
+  </div>
+
+  {# Filter #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+    <div class="govuk-grid-column-one-quarter">
+      {{ govukSelect({
+        id: "status-filter",
+        name: "status",
+        label: {
+          text: "Filter by status"
+        },
+        items: [
+          { value: "", text: "All", selected: true },
+          { value: "on-time", text: "On time" },
+          { value: "overdue", text: "Overdue" }
+        ]
+      }) }}
+    </div>
+  </div>
+
+  {# Current Borrows Table #}
+  <table class="govuk-table">
+    <caption class="govuk-table__caption govuk-table__caption--m">Current borrowing transactions</caption>
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Member</th>
+        <th scope="col" class="govuk-table__header">Member ID</th>
+        <th scope="col" class="govuk-table__header">Book</th>
+        <th scope="col" class="govuk-table__header">Copy ID</th>
+        <th scope="col" class="govuk-table__header">Borrow Date</th>
+        <th scope="col" class="govuk-table__header">Due Date</th>
+        <th scope="col" class="govuk-table__header">Status</th>
+        <th scope="col" class="govuk-table__header">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for borrow in borrows %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          <a href="/members/{{ borrow.memberId }}" class="govuk-link">{{ borrow.memberName }}</a>
+        </td>
+        <td class="govuk-table__cell">{{ borrow.memberId }}</td>
+        <td class="govuk-table__cell">{{ borrow.bookTitle }}</td>
+        <td class="govuk-table__cell">{{ borrow.copyId }}</td>
+        <td class="govuk-table__cell">{{ borrow.borrowDate }}</td>
+        <td class="govuk-table__cell">{{ borrow.dueDate }}</td>
+        <td class="govuk-table__cell">
+          {% if borrow.status == 'overdue' %}
+            {{ govukTag({ text: "Overdue", classes: "govuk-tag--red" }) }}
+          {% else %}
+            {{ govukTag({ text: "On time", classes: "govuk-tag--green" }) }}
+          {% endif %}
+        </td>
+        <td class="govuk-table__cell">
+          <a href="/borrowing/checkin?copyId={{ borrow.copyId }}" class="govuk-link">Check in</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {# Pagination #}
+  {{ govukPagination({
+    previous: {
+      href: "#"
+    },
+    next: {
+      href: "#"
+    },
+    items: [
+      { number: 1, current: true, href: "#" },
+      { number: 2, href: "#" },
+      { number: 3, href: "#" }
+    ]
+  }) }}
+
+{% endblock %}
