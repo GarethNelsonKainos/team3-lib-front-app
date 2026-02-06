@@ -1,0 +1,130 @@
+{% extends "layouts/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
+{% block beforeContent %}
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">Books</li>
+    </ol>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Book Catalog</h1>
+
+  {# Search and Filters #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+    <div class="govuk-grid-column-one-half">
+      {{ govukInput({
+        label: {
+          text: "Search books"
+        },
+        id: "book-search",
+        name: "search",
+        hint: {
+          text: "Search by title, author, or ISBN"
+        }
+      }) }}
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+      {{ govukSelect({
+        id: "genre-filter",
+        name: "genre",
+        label: {
+          text: "Filter by genre"
+        },
+        items: [
+          { value: "", text: "All genres", selected: true },
+          { value: "classic", text: "Classic" },
+          { value: "dystopian", text: "Dystopian" },
+          { value: "fantasy", text: "Fantasy" },
+          { value: "fiction", text: "Fiction" },
+          { value: "non-fiction", text: "Non-fiction" }
+        ]
+      }) }}
+    </div>
+    <div class="govuk-grid-column-one-quarter govuk-!-padding-top-6">
+      {{ govukButton({
+        text: "Search",
+        classes: "govuk-!-margin-bottom-0"
+      }) }}
+    </div>
+  </div>
+
+  {# Add Book Button #}
+  <div class="govuk-!-margin-bottom-6">
+    {{ govukButton({
+      text: "Add new book",
+      href: "/books/add"
+    }) }}
+  </div>
+
+  {# Books Table #}
+  <table class="govuk-table">
+    <caption class="govuk-table__caption govuk-table__caption--m">All books in catalog</caption>
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Title</th>
+        <th scope="col" class="govuk-table__header">Author</th>
+        <th scope="col" class="govuk-table__header">ISBN</th>
+        <th scope="col" class="govuk-table__header">Genre</th>
+        <th scope="col" class="govuk-table__header">Year</th>
+        <th scope="col" class="govuk-table__header">Copies</th>
+        <th scope="col" class="govuk-table__header">Available</th>
+        <th scope="col" class="govuk-table__header">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for book in books %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          <a href="/books/{{ book.id }}" class="govuk-link">{{ book.title }}</a>
+        </td>
+        <td class="govuk-table__cell">{{ book.author }}</td>
+        <td class="govuk-table__cell">{{ book.isbn }}</td>
+        <td class="govuk-table__cell">{{ book.genre }}</td>
+        <td class="govuk-table__cell">{{ book.year }}</td>
+        <td class="govuk-table__cell">{{ book.copies }}</td>
+        <td class="govuk-table__cell">
+          {% if book.available == 0 %}
+            {{ govukTag({ text: "0", classes: "govuk-tag--red" }) }}
+          {% elif book.available < book.copies %}
+            {{ govukTag({ text: book.available | string, classes: "govuk-tag--yellow" }) }}
+          {% else %}
+            {{ govukTag({ text: book.available | string, classes: "govuk-tag--green" }) }}
+          {% endif %}
+        </td>
+        <td class="govuk-table__cell">
+          <a href="/books/{{ book.id }}" class="govuk-link govuk-!-margin-right-2">View</a>
+          <a href="/books/{{ book.id }}/edit" class="govuk-link">Edit</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {# Pagination #}
+  {{ govukPagination({
+    previous: {
+      href: "#"
+    },
+    next: {
+      href: "#"
+    },
+    items: [
+      { number: 1, current: true, href: "#" },
+      { number: 2, href: "#" },
+      { number: 3, href: "#" }
+    ]
+  }) }}
+
+{% endblock %}

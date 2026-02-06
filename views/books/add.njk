@@ -1,0 +1,132 @@
+{% extends "layouts/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to books",
+    href: "/books"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Add new book</h1>
+
+  <form action="/books" method="post">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {{ govukInput({
+          label: {
+            text: "Title",
+            classes: "govuk-label--m"
+          },
+          id: "title",
+          name: "title"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Author(s)",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "For multiple authors, separate names with commas"
+          },
+          id: "author",
+          name: "author"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "ISBN",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "13-digit ISBN number"
+          },
+          id: "isbn",
+          name: "isbn",
+          classes: "govuk-input--width-20"
+        }) }}
+
+        {{ govukSelect({
+          id: "genre",
+          name: "genre",
+          label: {
+            text: "Genre",
+            classes: "govuk-label--m"
+          },
+          items: [
+            { value: "", text: "Select a genre" },
+            { value: "classic", text: "Classic" },
+            { value: "dystopian", text: "Dystopian" },
+            { value: "fantasy", text: "Fantasy" },
+            { value: "fiction", text: "Fiction" },
+            { value: "non-fiction", text: "Non-fiction" },
+            { value: "mystery", text: "Mystery" },
+            { value: "romance", text: "Romance" },
+            { value: "science-fiction", text: "Science Fiction" },
+            { value: "biography", text: "Biography" },
+            { value: "children", text: "Children's" }
+          ]
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Publication year",
+            classes: "govuk-label--m"
+          },
+          id: "year",
+          name: "year",
+          classes: "govuk-input--width-4",
+          inputmode: "numeric"
+        }) }}
+
+        {{ govukTextarea({
+          name: "description",
+          id: "description",
+          label: {
+            text: "Description",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "Brief description of the book"
+          }
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Number of copies",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "How many physical copies of this book are you adding?"
+          },
+          id: "copies",
+          name: "copies",
+          classes: "govuk-input--width-2",
+          inputmode: "numeric",
+          value: "1"
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Add book"
+          }) }}
+          {{ govukButton({
+            text: "Cancel",
+            href: "/books",
+            classes: "govuk-button--secondary"
+          }) }}
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+{% endblock %}

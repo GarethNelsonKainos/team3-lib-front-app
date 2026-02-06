@@ -1,0 +1,73 @@
+{% extends "layouts/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to borrowing",
+    href: "/borrowing"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Check out book</h1>
+
+  {{ govukInsetText({
+    text: "Members can borrow a maximum of 3 books at a time. The loan period is 14 days."
+  }) }}
+
+  <form action="/borrowing/checkout" method="post">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {{ govukInput({
+          label: {
+            text: "Member ID",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "Enter the member's ID (e.g., M001)"
+          },
+          id: "member-id",
+          name: "memberId",
+          classes: "govuk-input--width-10"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Copy ID",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "Enter the book copy ID to check out (e.g., C001)"
+          },
+          id: "copy-id",
+          name: "copyId",
+          classes: "govuk-input--width-10"
+        }) }}
+
+        {{ govukWarningText({
+          text: "Ensure the member has not exceeded their borrowing limit (3 books) and has no overdue items before proceeding.",
+          iconFallbackText: "Warning"
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Check out"
+          }) }}
+          {{ govukButton({
+            text: "Cancel",
+            href: "/borrowing",
+            classes: "govuk-button--secondary"
+          }) }}
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+{% endblock %}

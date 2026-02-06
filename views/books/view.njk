@@ -1,0 +1,147 @@
+{% extends "layouts/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to books",
+    href: "/books"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">{{ book.title }}</h1>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: { text: "Title" },
+            value: { text: book.title },
+            actions: {
+              items: [
+                { href: "/books/" + book.id + "/edit", text: "Change", visuallyHiddenText: "title" }
+              ]
+            }
+          },
+          {
+            key: { text: "Author" },
+            value: { text: book.author },
+            actions: {
+              items: [
+                { href: "/books/" + book.id + "/edit", text: "Change", visuallyHiddenText: "author" }
+              ]
+            }
+          },
+          {
+            key: { text: "ISBN" },
+            value: { text: book.isbn },
+            actions: {
+              items: [
+                { href: "/books/" + book.id + "/edit", text: "Change", visuallyHiddenText: "ISBN" }
+              ]
+            }
+          },
+          {
+            key: { text: "Genre" },
+            value: { text: book.genre },
+            actions: {
+              items: [
+                { href: "/books/" + book.id + "/edit", text: "Change", visuallyHiddenText: "genre" }
+              ]
+            }
+          },
+          {
+            key: { text: "Publication year" },
+            value: { text: book.year },
+            actions: {
+              items: [
+                { href: "/books/" + book.id + "/edit", text: "Change", visuallyHiddenText: "publication year" }
+              ]
+            }
+          },
+          {
+            key: { text: "Total copies" },
+            value: { text: book.copies | string }
+          },
+          {
+            key: { text: "Available copies" },
+            value: { html: govukTag({ text: book.available | string, classes: "govuk-tag--green" if book.available > 0 else "govuk-tag--red" }) }
+          }
+        ]
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Edit book details",
+          href: "/books/" + book.id + "/edit"
+        }) }}
+        {{ govukButton({
+          text: "Add copy",
+          classes: "govuk-button--secondary"
+        }) }}
+        {% if book.available == book.copies %}
+        {{ govukButton({
+          text: "Delete book",
+          classes: "govuk-button--warning"
+        }) }}
+        {% endif %}
+      </div>
+
+      {% if book.available < book.copies %}
+      {{ govukWarningText({
+        text: "This book cannot be deleted while copies are borrowed.",
+        iconFallbackText: "Warning"
+      }) }}
+      {% endif %}
+
+    </div>
+  </div>
+
+  <h2 class="govuk-heading-l govuk-!-margin-top-8">Copy Management</h2>
+
+  <table class="govuk-table">
+    <caption class="govuk-table__caption govuk-visually-hidden">Copies of {{ book.title }}</caption>
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Copy ID</th>
+        <th scope="col" class="govuk-table__header">Status</th>
+        <th scope="col" class="govuk-table__header">Borrower</th>
+        <th scope="col" class="govuk-table__header">Due Date</th>
+        <th scope="col" class="govuk-table__header">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for copy in copies %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ copy.id }}</td>
+        <td class="govuk-table__cell">
+          {% if copy.status == 'available' %}
+            {{ govukTag({ text: "Available", classes: "govuk-tag--green" }) }}
+          {% elif copy.status == 'borrowed' %}
+            {{ govukTag({ text: "Borrowed", classes: "govuk-tag--blue" }) }}
+          {% endif %}
+        </td>
+        <td class="govuk-table__cell">{{ copy.borrower or "—" }}</td>
+        <td class="govuk-table__cell">{{ copy.dueDate or "—" }}</td>
+        <td class="govuk-table__cell">
+          {% if copy.status == 'available' %}
+            <a href="/borrowing/checkout?copyId={{ copy.id }}" class="govuk-link">Check out</a>
+          {% else %}
+            <a href="/borrowing/checkin?copyId={{ copy.id }}" class="govuk-link">Check in</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
