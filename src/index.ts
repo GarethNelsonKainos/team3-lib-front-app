@@ -32,6 +32,10 @@ app.get('/', (req: Request, res: Response) => {
     res.render('dashboard');
 });
 
+app.get('/dashboard', (req: Request, res: Response) => {
+    res.render('dashboard');
+});
+
 app.use('/govuk', express.static(
   path.join(projectRoot, 'node_modules/govuk-frontend/dist/govuk')
 ));
