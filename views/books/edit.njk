@@ -1,0 +1,108 @@
+{% extends "layouts/base.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back to book details",
+    href: "/books/" + book.id
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Edit book details</h1>
+
+  <form action="/books/{{ book.id }}" method="post">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {{ govukInput({
+          label: {
+            text: "Title",
+            classes: "govuk-label--m"
+          },
+          id: "title",
+          name: "title",
+          value: book.title
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Author(s)",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "For multiple authors, separate names with commas"
+          },
+          id: "author",
+          name: "author",
+          value: book.author
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "ISBN",
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: "13-digit ISBN number"
+          },
+          id: "isbn",
+          name: "isbn",
+          classes: "govuk-input--width-20",
+          value: book.isbn
+        }) }}
+
+        {{ govukSelect({
+          id: "genre",
+          name: "genre",
+          label: {
+            text: "Genre",
+            classes: "govuk-label--m"
+          },
+          items: [
+            { value: "classic", text: "Classic", selected: book.genre == "Classic" },
+            { value: "dystopian", text: "Dystopian", selected: book.genre == "Dystopian" },
+            { value: "fantasy", text: "Fantasy", selected: book.genre == "Fantasy" },
+            { value: "fiction", text: "Fiction", selected: book.genre == "Fiction" },
+            { value: "non-fiction", text: "Non-fiction", selected: book.genre == "Non-fiction" },
+            { value: "mystery", text: "Mystery", selected: book.genre == "Mystery" },
+            { value: "romance", text: "Romance", selected: book.genre == "Romance" },
+            { value: "science-fiction", text: "Science Fiction", selected: book.genre == "Science Fiction" },
+            { value: "biography", text: "Biography", selected: book.genre == "Biography" },
+            { value: "children", text: "Children's", selected: book.genre == "Children's" }
+          ]
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Publication year",
+            classes: "govuk-label--m"
+          },
+          id: "year",
+          name: "year",
+          classes: "govuk-input--width-4",
+          inputmode: "numeric",
+          value: book.year
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save changes"
+          }) }}
+          {{ govukButton({
+            text: "Cancel",
+            href: "/books/" + book.id,
+            classes: "govuk-button--secondary"
+          }) }}
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
