@@ -1,0 +1,32 @@
+{% extends "govuk/template.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% block pageTitle %}GOV.UK components test{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/govuk/govuk-frontend.min.css">
+{% endblock %}
+
+{% block header %}
+    {{ govukHeader({
+        serviceName: "Library Management System",
+        serviceUrl: "/"
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-xl">Dashboard</h1>
+    <p class="govuk-body">Use this dashboard to interact with the library management system.</p>
+
+{% endblock %}
+
+{% block bodyEnd %}
+    <script src="/govuk/govuk-frontend.min.js"></script>
+    <script>
+        window.GOVUKFrontend.initAll();
+    </script>
+{% endblock %}
