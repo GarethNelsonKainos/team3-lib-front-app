@@ -1,0 +1,37 @@
+{
+  "name": "team3-lib-front-app",
+  "version": "1.0.0",
+  "description": "Team 3 Library Frontend Application Feb/Marc 2026",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GarethNelsonKainos/team3-lib-front-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GarethNelsonKainos/team3-lib-front-app/issues"
+  },
+  "homepage": "https://github.com/GarethNelsonKainos/team3-lib-front-app#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@types/nunjucks": "^3.2.6",
+    "express": "^5.2.1",
+    "govuk-frontend": "^5.14.0",
+    "nunjucks": "^3.2.4"
+  }
+}
