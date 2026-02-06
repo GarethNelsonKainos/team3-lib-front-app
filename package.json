@@ -2,10 +2,10 @@
   "name": "team3-lib-front-app",
   "version": "1.0.0",
   "description": "Library Management System - GOV.UK Design System Frontend",
-  "main": "server.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "tsx index.ts",
+    "dev": "tsx watch index.ts"
   },
   "dependencies": {
     "@types/nunjucks": "^3.2.6",
